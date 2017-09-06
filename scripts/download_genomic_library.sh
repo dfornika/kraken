@@ -37,13 +37,16 @@ THIS_DIR=$PWD
 library_name="$1"
 library_file="library.fna"
 case "$1" in
-  "archaea" | "bacteria" | "viral" | "human" )
+  "archaea" | "bacteria" | "viral" | "human" | "mouse" | "fungi")
     mkdir -p $LIBRARY_DIR/$library_name
     cd $LIBRARY_DIR/$library_name
     rm -f assembly_summary.txt
     remote_dir_name=$library_name
     if [ "$library_name" = "human" ]; then
       remote_dir_name="vertebrate_mammalian/Homo_sapiens"
+    fi
+    if [ "$library_name" = "mouse" ]; then
+      remote_dir_name="vertebrate_mammalian/Mus_musculus"
     fi
     if ! wget -q $FTP_SERVER/genomes/refseq/$remote_dir_name/assembly_summary.txt; then
       echo "Error downloading assembly summary file for $library_name, exiting." >/dev/fd/2
@@ -72,6 +75,6 @@ case "$1" in
     ;;
   *)
     echo "Unsupported library.  Valid options are: "
-    echo "  archaea bacteria plasmid viral human"
+    echo "  archaea bacteria plasmid viral human mouse fungi"
     ;;
 esac
